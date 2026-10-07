@@ -45,7 +45,8 @@ html.is-loading #model-viewer.is-warming {
   position: fixed;
   top: 0;
   bottom: 0;
-  background: #000;
+  background: var(--primary);
+  /* background: #000; */
   z-index: 1800;
   text-align: center;
   .outer {
@@ -146,4 +147,3 @@ html.is-loading #model-viewer.is-warming {
     color: #fff;
   }
 }
-
