@@ -227,10 +227,9 @@ footer .links {
     align-items: start;
     /* margin: 0 auto; */
   }
-  .text-img:nth-child(1) {
+  .reversed {
     flex-direction: column-reverse;
     padding-top: 0;
-    /* padding-block: 6rem; */
   }
   .typografy {
     max-width: none;
