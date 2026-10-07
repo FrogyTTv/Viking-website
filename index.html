@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="is-loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Högger - Viking Website</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="loading.css" />
     <script
       type="module"
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
@@ -31,8 +32,38 @@
         console.log(toggleImages);
       };
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"
+      defer
+    ></script>
+    <script src="./loading.js" defer></script>
   </head>
   <body>
+    <div class="loading-animation">
+      <img
+        src="https://images.unsplash.com/photo-1585468274952-66591eb14165?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Nzc0OTkzNDA&ixlib=rb-4.0.3&q=80"
+      />
+      <div class="preloader-wrap">
+        <div class="outer">
+          <div class="inner">
+            <div class="trackbar">
+              <ul class="preloader-intro">
+                <li class="preloader-list">Code by Elias</li>
+                <li class="preloader-list">Högger</li>
+                <li class="preloader-list">Code by Elias</li>
+                <li class="preloader-list">Högger</li>
+                <!-- <li class="preloader-list">jQuery</li> -->
+              </ul>
+            </div>
+            <div class="percentage-wrapper">
+              <div class="percentage" id="percent"></div>
+            </div>
+            <div class="percentage-intro">Loading</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <nav>
       <a href="#">Högger</a>
     </nav>
@@ -43,63 +74,65 @@
         <img src="./src/icon-mockup.png" alt="Logo For" class="logo" />
       </div>
     </header>
-    <svg
-      class="rune-seperator first"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 600 40"
-      width="100%"
-      height="40"
-    >
-      <!-- Left ornamental line -->
-      <path
-        d="M 10 20 L 140 20"
-        stroke="#c5a059"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <circle cx="150" cy="20" r="3" fill="#c5a059" />
-
-      <!-- Runes (Fehu, Uruz, Thurisaz, Ansuz, Raidho, Kenaz) -->
-      <g
-        fill="none"
-        stroke="#c5a059"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        transform="translate(170, 5)"
-      >
-        <!-- Fehu -->
-        <path d="M 0 20 L 0 0 M 0 6 L 10 2 M 0 12 L 8 8" />
-        <!-- Uruz -->
-        <path d="M 25 0 L 25 20 Q 35 20 35 12 Q 35 5 25 5" />
-        <!-- Thurisaz -->
-        <path d="M 50 0 L 50 20 M 50 7 L 60 2 M 50 12 L 60 17" />
-        <!-- Ansuz -->
-        <path d="M 75 20 L 75 0 M 75 4 L 85 9 M 75 12 L 85 17" />
-        <!-- Raidho -->
-        <path d="M 100 20 L 100 0 M 100 0 L 110 5 L 100 10 M 100 10 L 110 20" />
-        <!-- Kenaz -->
-        <path d="M 125 2 L 135 10 L 125 18" />
-      </g>
-
-      <!-- Right ornamental separator and line -->
-      <circle cx="330" cy="20" r="3" fill="#c5a059" />
-      <path
-        d="M 340 20 L 470 20"
-        stroke="#c5a059"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <!-- Center/Right Knot element or diamond accent -->
-      <polygon points="485,20 490,15 495,20 490,25" fill="#c5a059" />
-      <path
-        d="M 510 20 L 590 20"
-        stroke="#c5a059"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-    </svg>
     <main>
+      <svg
+        class="rune-seperator first"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 600 40"
+        width="100%"
+        height="40"
+      >
+        <!-- Left ornamental line -->
+        <path
+          d="M 10 20 L 140 20"
+          stroke="#c5a059"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+        <circle cx="150" cy="20" r="3" fill="#c5a059" />
+
+        <!-- Runes (Fehu, Uruz, Thurisaz, Ansuz, Raidho, Kenaz) -->
+        <g
+          fill="none"
+          stroke="#c5a059"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          transform="translate(170, 5)"
+        >
+          <!-- Fehu -->
+          <path d="M 0 20 L 0 0 M 0 6 L 10 2 M 0 12 L 8 8" />
+          <!-- Uruz -->
+          <path d="M 25 0 L 25 20 Q 35 20 35 12 Q 35 5 25 5" />
+          <!-- Thurisaz -->
+          <path d="M 50 0 L 50 20 M 50 7 L 60 2 M 50 12 L 60 17" />
+          <!-- Ansuz -->
+          <path d="M 75 20 L 75 0 M 75 4 L 85 9 M 75 12 L 85 17" />
+          <!-- Raidho -->
+          <path
+            d="M 100 20 L 100 0 M 100 0 L 110 5 L 100 10 M 100 10 L 110 20"
+          />
+          <!-- Kenaz -->
+          <path d="M 125 2 L 135 10 L 125 18" />
+        </g>
+
+        <!-- Right ornamental separator and line -->
+        <circle cx="330" cy="20" r="3" fill="#c5a059" />
+        <path
+          d="M 340 20 L 470 20"
+          stroke="#c5a059"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+        <!-- Center/Right Knot element or diamond accent -->
+        <polygon points="485,20 490,15 495,20 490,25" fill="#c5a059" />
+        <path
+          d="M 510 20 L 590 20"
+          stroke="#c5a059"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
       <div class="wrapper">
         <section class="text-img">
           <img src="./src/Axe_img.png" alt="" />
@@ -119,6 +152,7 @@
         <model-viewer
           id="model-viewer"
           src="./src/Battle Axe.glb"
+          loading="eager"
           camera-controls
           skybox-image="./src/lago_disola_4k.hdr"
           environment-image="./src/lago_disola_4k.hdr"
@@ -127,6 +161,15 @@
           max-field-of-view="70deg"
           disable-zoom
           touch-action="pan-y"
+        >
+        </model-viewer>
+        <model-viewer
+          id="shield-preload"
+          src="./src/Shield.glb"
+          loading="eager"
+          alt=""
+          aria-hidden="true"
+          tabindex="-1"
         >
         </model-viewer>
 

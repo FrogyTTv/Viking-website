@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+
+html.is-loading,
+html.is-loading body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+html.is-loading body {
+  touch-action: none;
+}
+
+#shield-preload {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.loading-animation .outer {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.loading-animation .inner {
+  display: table-cell;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.loading-animation .preloader-wrap {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 1800;
+  text-align: center;
+  .outer {
+    padding: 0px;
+  }
+  .inner {
+    vertical-align: middle;
+  }
+}
+.loading-animation .percentage-wrapper {
+  height: 20px;
+  position: absolute;
+  margin-bottom: 20px;
+  right: 80px;
+  bottom: 40px;
+}
+.loading-animation .percentage-intro {
+  height: 20px;
+  position: absolute;
+  margin-bottom: 20px;
+  left: 80px;
+  bottom: 40px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.loading-animation .uppercase-text {
+  .loading-animation .percentage-intro {
+    text-transform: uppercase;
+  }
+  .loading-animation .preloader-intro {
+    text-transform: uppercase;
+  }
+}
+.loading-animation .percentage {
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  width: 30px;
+  height: 100px;
+  color: rgba(255, 255, 255, 0.6);
+  display: table;
+  margin: 0 auto;
+  &::after {
+    content: "%";
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+.loading-animation .trackbar {
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display: table;
+  position: relative;
+  padding: 20px;
+  opacity: 1;
+  overflow: hidden;
+}
+.loading-animation .loadbar {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: 0px;
+  right: 0;
+  overflow: hidden;
+}
+.loading-animation .hold-progress-bar {
+  width: 0%;
+  height: 0px;
+  background: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+.loading-animation .preloader-intro {
+  font-weight: 500;
+  position: relative;
+  display: block;
+  font-size: 9vw;
+  line-height: 13vw;
+  height: 13vw;
+  color: #fff;
+  overflow: hidden;
+  margin: 0;
+  li {
+    list-style: none;
+    line-height: inherit;
+    margin: 0;
+    color: #fff;
+  }
+}
+
+.loading-animation > img {
+  display: none;
+}
