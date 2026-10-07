@@ -41,12 +41,42 @@ document.addEventListener("DOMContentLoaded", function () {
   var exitScheduled = false;
 
   var assetDefs = [
-    { key: "axe", url: "./src/Battle Axe.glb", weight: 0.12, type: "model/gltf-binary" },
-    { key: "shield", url: "./src/Shield.glb", weight: 0.12, type: "model/gltf-binary" },
-    { key: "hdr", url: "./src/lago_disola_512.hdr", weight: 0.22, type: "image/vnd.radiance" },
-    { key: "logo", url: "./src/icon-mockup.png", weight: 0.12, type: "image/png" },
-    { key: "axeImg", url: "./src/Axe_img.png", weight: 0.18, type: "image/png" },
-    { key: "dragonImg", url: "./src/Dragon_img.png", weight: 0.24, type: "image/png" },
+    {
+      key: "axe",
+      url: "./src/Battle Axe.glb",
+      weight: 0.12,
+      type: "model/gltf-binary",
+    },
+    {
+      key: "shield",
+      url: "./src/Shield.glb",
+      weight: 0.12,
+      type: "model/gltf-binary",
+    },
+    {
+      key: "hdr",
+      url: "./src/lago_disola_4k.hdr",
+      weight: 0.22,
+      type: "image/vnd.radiance",
+    },
+    {
+      key: "logo",
+      url: "./src/icon-mockup.png",
+      weight: 0.12,
+      type: "image/png",
+    },
+    {
+      key: "axeImg",
+      url: "./src/Axe_img.png",
+      weight: 0.18,
+      type: "image/png",
+    },
+    {
+      key: "dragonImg",
+      url: "./src/Dragon_img.png",
+      weight: 0.24,
+      type: "image/png",
+    },
   ];
 
   var progress = {};
@@ -191,8 +221,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // model-viewer is unreliable with blob: HDR URLs, so point it at the
     // real paths after fetch has already warmed the HTTP cache.
     if (viewer) {
-      viewer.setAttribute("skybox-image", "./src/lago_disola_512.hdr");
-      viewer.setAttribute("environment-image", "./src/lago_disola_512.hdr");
+      viewer.setAttribute("skybox-image", "./src/lago_disola_4k.hdr");
+      viewer.setAttribute("environment-image", "./src/lago_disola_4k.hdr");
       viewer.setAttribute("src", "./src/Battle Axe.glb");
     }
 
