@@ -5,63 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Högger - Viking Website</title>
     <link rel="stylesheet" href="style.css" />
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+    <script defer>
+      //   const viewer = document.getElementById("model-viewer");
+      let toggleImages = false;
+
+      const updateModel = () => {
+        if (!toggleImages) {
+          document
+            .getElementById("model-viewer")
+            .setAttribute("src", "./src/Battle Axe.glb");
+        } else {
+          document
+            .getElementById("model-viewer")
+            .setAttribute("src", "./src/Shield.glb");
+        }
+      };
+
+      const changeImage = () => {
+        toggleImages = !toggleImages;
+        updateModel();
+        console.log(toggleImages);
+      };
+    </script>
   </head>
   <body>
     <nav>
       <a href="#">Högger</a>
     </nav>
     <header>
-      <h1 class="title">Forge your legacy, Armed by the Högger</h1>
-      <!-- <h1 class="title">Title motto, blablablaYOYOY. Title motto, blablabla</h1> -->
+      <h1 class="title">Wield the Axe. Bear the Dragon. Become Legend.</h1>
+      <!-- <h1 class="title">Forge your legacy, Armed by the Högger</h1> -->
       <div class="logo-container">
         <img src="./src/icon-mockup.png" alt="Logo For" class="logo" />
       </div>
     </header>
     <main>
-      <div class="container">
-        <div class="wrapper">
-          <section class="text-img">
-            <img src="./src/Axe_img.png" alt="" />
-            <div class="typografy">
-              <h3 class="title">The Högger Battle Axe</h3>
-              <p>
-                Forged for the vanguard of our frontline raid squads. This
-                heavy-cleaving axe features a sweeping, wide-bearded edge
-                designed to hook shields and break through dense iron defense
-                formations with sheer kinetic force.
-              </p>
-            </div>
-          </section>
-        </div>
-        <section class="model-panner">
-          <model-viewer 
-            id="model-viewer" 
-            src="./src/Battle Axe.glb" 
-            camera-controls 
-            skybox-image="./src/lago_disola_4k.hdr" 
-            environment-image="./src/lago_disola_4k.hdr" 
-            max-field-of-view="45deg">
-          </model-viewer>
-          <button class="Shield">Examine Shield</button>
-          <button class="Weapon">Examine Axe</button>
+      <div class="wrapper">
+        <section class="text-img">
+          <img src="./src/Axe_img.png" alt="" />
+          <div class="typografy">
+            <h3 class="title">The Högger Battle Axe</h3>
+            <p>
+              Forged for the vanguard of our frontline raid squads. This
+              heavy-cleaving axe features a sweeping, wide-bearded edge designed
+              to hook shields and break through dense iron defense formations
+              with sheer kinetic force.
+            </p>
+          </div>
         </section>
-        <div class="wrapper">
-          <section class="text-img">
-            <div class="typografy">
-              <h3 class="title">The Dragon Sigil Aegis</h3>
-              <p>
-                Carved from ancestral ironwood planks and bound with reinforced
-                steel rims. The central iron boss is engraved with the clan's
-                biting dragon crest, offering absolute protection to our
-                warriors in shield wall formations.
-              </p>
-            </div>
-            <img src="./src/Dragon_img.png" alt="" />
-          </section>
+      </div>
+      <section class="model-panner">
+        <model-viewer
+          id="model-viewer"
+          src="./src/Battle Axe.glb"
+          camera-controls
+          skybox-image="./src/lago_disola_4k.hdr"
+          environment-image="./src/lago_disola_4k.hdr"
+          field-of-view="70deg"
+          min-field-of-view="70deg"
+          max-field-of-view="70deg"
+          disable-zoom
+          touch-action="pan-y"
+        >
+        </model-viewer>
+
+        <div class="buttons">
+          <button onclick="changeImage()">←</button>
+          <button onclick="changeImage()">→</button>
         </div>
+      </section>
+      <div class="wrapper">
+        <section class="text-img">
+          <div class="typografy">
+            <h3 class="title">The Dragon Sigil Aegis</h3>
+            <p>
+              Carved from ancestral ironwood planks and bound with reinforced
+              steel rims. The central iron boss is engraved with the clan's
+              biting dragon crest, offering absolute protection to our warriors
+              in shield wall formations.
+            </p>
+          </div>
+          <img src="./src/Dragon_img.png" alt="" />
+        </section>
       </div>
     </main>
-    <script src="script.js" defer></script>
   </body>
 </html>

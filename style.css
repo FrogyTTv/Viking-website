@@ -28,6 +28,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+li {
+  letter-spacing: -3.5%;
+  line-height: 115%;
+}
+
 a,
 p {
   text-decoration: none;
@@ -52,7 +65,7 @@ header {
   padding-inline: calc(2 * 5.5rem + 2rem);
 
   /* gap: 14rem; */
-  height: 49rem;
+  height: 47rem;
   /* margin-bottom: 5rem; */
 }
 
@@ -62,7 +75,7 @@ header {
 }
 
 h1.title {
-  max-width: 33rem;
+  max-width: 40rem;
   text-align: center;
 }
 .logo-container {
@@ -80,16 +93,10 @@ h1.title {
   transform: translateY(-8rem);
   max-width: 30rem;
 }
-.container {
-  /* padding-block: 8rem; */
-}
 .wrapper {
   display: flex;
   padding-block: 8rem;
-  /* flex-direction: column; */
   justify-content: center;
-  /* padding-block: 8rem; */
-  /* background-color: rgba(0, 128, 0, 0.465); */
   padding-inline: 2rem;
 }
 
@@ -101,25 +108,48 @@ h1.title {
   max-width: 86rem;
   justify-content: space-between;
   align-items: center;
-
-  /* padding-inline: 2rem; */
 }
 .text-img img {
   aspect-ratio: 16/9;
   max-width: 38rem;
-  /* max-height: 30rem; */
-  /* background-color: blue; */
-  /* object-fit: contain; */
   border-radius: 1.75rem;
 }
 .typografy {
+  display: grid;
+  gap: 0.5rem;
   max-width: 42rem;
 }
 
 .model-panner {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 55rem;
   background-color: var(--primary);
+  padding-inline: 2rem;
+  gap: 1rem;
+}
+
+#model-viewer {
+  flex: 1;
+  max-height: 40rem;
+  height: 100%;
+  width: 100%;
+  max-width: 80rem;
+  border-radius: 1.75rem;
+
+  display: block;
+}
+
+.model-panner .buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+.model-panner .buttons button {
+  border: none;
+  aspect-ratio: 1;
+  width: 4rem;
+  font-size: 1.5em;
+  border-radius: 20rem;
 }
