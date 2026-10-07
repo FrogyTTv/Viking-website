@@ -13,6 +13,21 @@ html.is-loading body {
   touch-action: none;
 }
 
+/* Keep the WebGL viewer in the viewport while loading so iOS
+   finishes shader compile / first paint under the overlay.
+   Stay opaque but below the preloader so model-visibility can fire. */
+html.is-loading #model-viewer.is-warming {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 55vh !important;
+  max-height: none !important;
+  max-width: none !important;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .loading-animation .outer {
   display: table;
   width: 100%;

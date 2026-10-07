@@ -35,7 +35,7 @@
             "src",
             toggleImages
               ? window.preloadedShieldUrl || "./src/Shield.glb"
-              : "./src/Battle Axe.glb",
+              : window.preloadedAxeUrl || "./src/Battle Axe.glb",
           );
       };
 
@@ -79,7 +79,11 @@
       <h1 class="title">Wield the Axe. Bear the Dragon. Become Legend.</h1>
       <!-- <h1 class="title">Forge your legacy, Armed by the Högger</h1> -->
       <div class="logo-container">
-        <img src="./src/icon-mockup.png" alt="Logo For" class="logo" />
+        <img
+          data-src="./src/icon-mockup.png"
+          alt="Logo For"
+          class="logo"
+        />
       </div>
     </header>
     <main>
@@ -143,7 +147,7 @@
       </svg>
       <div class="wrapper">
         <section class="text-img">
-          <img src="./src/Axe_img.png" alt="" />
+          <img data-src="./src/Axe_img.png" alt="" />
           <div class="typografy">
             <h3 class="title">The Högger Battle Axe</h3>
             <p>
@@ -159,12 +163,9 @@
       <section class="model-panner">
         <model-viewer
           id="model-viewer"
-          src="./src/Battle Axe.glb"
           loading="eager"
           reveal="auto"
           camera-controls
-          skybox-image="./src/lago_disola_512.hdr"
-          environment-image="./src/lago_disola_512.hdr"
           field-of-view="70deg"
           min-field-of-view="70deg"
           max-field-of-view="70deg"
@@ -192,7 +193,7 @@
               in shield wall formations.
             </p>
           </div>
-          <img src="./src/Dragon_img.png" alt="" />
+          <img data-src="./src/Dragon_img.png" alt="" />
         </section>
       </div>
       <svg

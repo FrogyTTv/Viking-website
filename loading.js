@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var slides = document.querySelectorAll(".preloader-list");
   var intro = document.querySelector(".preloader-intro");
   var percentEl = document.getElementById("percent");
+  var viewer = document.getElementById("model-viewer");
   var lineHeight = intro ? intro.getBoundingClientRect().height : 0;
   var slideDuration = 0.55;
 
@@ -35,201 +36,304 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var startedAt = performance.now();
   var MIN_VISIBLE_MS = 900;
-  var HARD_TIMEOUT_MS = 45000;
+  var HARD_TIMEOUT_MS = 60000;
   var shownPercent = 0;
   var exitScheduled = false;
-  var weights = {
-    viewer: 0.55,
-    shield: 0.15,
-    images: 0.25,
-    fonts: 0.05,
-  };
-  var progress = {
-    viewer: 0,
-    shield: 0,
-    images: 0,
-    fonts: 0,
-  };
+
+  var assetDefs = [
+    { key: "axe", url: "./src/Battle Axe.glb", weight: 0.12, type: "model/gltf-binary" },
+    { key: "shield", url: "./src/Shield.glb", weight: 0.12, type: "model/gltf-binary" },
+    { key: "hdr", url: "./src/lago_disola_512.hdr", weight: 0.22, type: "image/vnd.radiance" },
+    { key: "logo", url: "./src/icon-mockup.png", weight: 0.12, type: "image/png" },
+    { key: "axeImg", url: "./src/Axe_img.png", weight: 0.18, type: "image/png" },
+    { key: "dragonImg", url: "./src/Dragon_img.png", weight: 0.24, type: "image/png" },
+  ];
+
+  var progress = {};
+  var blobs = {};
   var loaded = {
+    assets: false,
     viewer: false,
-    shield: false,
-    images: false,
-    fonts: false,
+    paint: false,
+    window: false,
   };
+
+  assetDefs.forEach(function (asset) {
+    progress[asset.key] = 0;
+  });
 
   percentEl.textContent = "0";
   lockScroll();
+  warmViewer();
 
-  preloadShield();
-  preloadImages();
-  preloadFonts();
-
-  customElements.whenDefined("model-viewer").then(function () {
-    watchViewer(document.getElementById("model-viewer"));
-  });
+  Promise.all([
+    loadAllAssets(),
+    waitForWindowLoad(),
+    customElements.whenDefined("model-viewer"),
+  ])
+    .then(function () {
+      return applyAssets();
+    })
+    .then(function () {
+      return waitForViewerReady(viewer);
+    })
+    .then(function () {
+      return waitForPaint();
+    })
+    .then(function () {
+      loaded.assets = true;
+      loaded.viewer = true;
+      loaded.paint = true;
+      loaded.window = true;
+      setPercent(100);
+      scheduleExit();
+    })
+    .catch(function () {
+      loaded.assets = true;
+      loaded.viewer = true;
+      loaded.paint = true;
+      loaded.window = true;
+      setPercent(100);
+      scheduleExit();
+    });
 
   setTimeout(function () {
     if (exitScheduled) return;
-    Object.keys(loaded).forEach(function (key) {
-      loaded[key] = true;
-      progress[key] = 1;
-    });
-    renderProgress();
+    loaded.assets = true;
+    loaded.viewer = true;
+    loaded.paint = true;
+    loaded.window = true;
+    setPercent(100);
+    scheduleExit();
   }, HARD_TIMEOUT_MS);
 
-  function watchViewer(element) {
+  function loadAllAssets() {
+    return Promise.all(
+      assetDefs.map(function (asset) {
+        return fetchAsset(asset).then(function (buffer) {
+          blobs[asset.key] = URL.createObjectURL(
+            new Blob([buffer], { type: asset.type }),
+          );
+          progress[asset.key] = 1;
+          renderProgress();
+        });
+      }),
+    ).then(function () {
+      loaded.assets = true;
+    });
+  }
+
+  function fetchAsset(asset) {
+    return fetch(asset.url).then(function (response) {
+      if (!response.ok) throw new Error(asset.key);
+      var total = Number(response.headers.get("Content-Length")) || 0;
+
+      if (!response.body || !response.body.getReader) {
+        return response.arrayBuffer().then(function (buffer) {
+          progress[asset.key] = 1;
+          renderProgress();
+          return buffer;
+        });
+      }
+
+      var reader = response.body.getReader();
+      var received = 0;
+      var chunks = [];
+
+      function read() {
+        return reader.read().then(function (result) {
+          if (result.done) {
+            var full = new Uint8Array(received);
+            var offset = 0;
+            chunks.forEach(function (chunk) {
+              full.set(chunk, offset);
+              offset += chunk.byteLength;
+            });
+            progress[asset.key] = 1;
+            renderProgress();
+            return full.buffer;
+          }
+
+          chunks.push(result.value);
+          received += result.value.byteLength;
+          if (total) {
+            progress[asset.key] = Math.min(0.99, received / total);
+            renderProgress();
+          }
+          return read();
+        });
+      }
+
+      return read();
+    });
+  }
+
+  function applyAssets() {
+    var imageMap = [
+      { selector: "img.logo", key: "logo" },
+      { selector: ".text-img:not(.reversed) img", key: "axeImg" },
+      { selector: ".text-img.reversed img", key: "dragonImg" },
+    ];
+
+    var decodes = imageMap.map(function (item) {
+      var img = document.querySelector(item.selector);
+      if (!img || !blobs[item.key]) return Promise.resolve();
+      img.removeAttribute("data-src");
+      img.src = blobs[item.key];
+      if (img.decode) return img.decode().catch(function () {});
+      if (img.complete) return Promise.resolve();
+      return new Promise(function (resolve) {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    });
+
+    // model-viewer is unreliable with blob: HDR URLs, so point it at the
+    // real paths after fetch has already warmed the HTTP cache.
+    if (viewer) {
+      viewer.setAttribute("skybox-image", "./src/lago_disola_512.hdr");
+      viewer.setAttribute("environment-image", "./src/lago_disola_512.hdr");
+      viewer.setAttribute("src", "./src/Battle Axe.glb");
+    }
+
+    window.preloadedAxeUrl = "./src/Battle Axe.glb";
+    window.preloadedShieldUrl = blobs.shield || "./src/Shield.glb";
+
+    return Promise.all(decodes);
+  }
+
+  function waitForViewerReady(element) {
     if (!element) {
-      markLoaded("viewer");
-      return;
+      loaded.viewer = true;
+      return Promise.resolve();
     }
 
-    element.addEventListener("progress", function (event) {
-      var value = event.detail && event.detail.totalProgress;
-      if (typeof value !== "number") return;
-      progress.viewer = Math.max(progress.viewer, value);
-      renderProgress();
-    });
+    return new Promise(function (resolve) {
+      var settled = false;
 
-    element.addEventListener("load", function () {
-      markLoaded("viewer");
-    });
-    element.addEventListener("error", function () {
-      markLoaded("viewer");
-    });
-
-    if (element.loaded) markLoaded("viewer");
-  }
-
-  function preloadShield() {
-    trackFetch("./src/Shield.glb", "shield", function (chunks) {
-      window.preloadedShieldUrl = URL.createObjectURL(
-        new Blob(chunks, { type: "model/gltf-binary" }),
-      );
-      markLoaded("shield");
-    });
-  }
-
-  function preloadImages() {
-    var images = Array.prototype.slice.call(
-      document.querySelectorAll("img[data-preload], img.logo, .text-img img"),
-    );
-
-    if (!images.length) {
-      markLoaded("images");
-      return;
-    }
-
-    var settled = 0;
-    var total = images.length;
-
-    images.forEach(function (img) {
-      var finish = function () {
-        settled += 1;
-        progress.images = settled / total;
+      function done() {
+        if (settled) return;
+        settled = true;
+        loaded.viewer = true;
         renderProgress();
-        if (settled >= total) markLoaded("images");
-      };
+        resolve();
+      }
 
-      if (img.complete && img.naturalWidth > 0) {
-        if (img.decode) {
-          img.decode().then(finish).catch(finish);
-        } else {
-          finish();
-        }
+      element.addEventListener("progress", function (event) {
+        var value = event.detail && event.detail.totalProgress;
+        if (typeof value !== "number") return;
+        progress.axe = Math.max(progress.axe, 0.85 + value * 0.15);
+        renderProgress();
+      });
+
+      function afterLoad() {
+        var visible = element.modelIsVisible
+          ? Promise.resolve()
+          : new Promise(function (res) {
+              var finished = false;
+              var finish = function () {
+                if (finished) return;
+                finished = true;
+                element.removeEventListener("model-visibility", onVisible);
+                res();
+              };
+              var onVisible = function (event) {
+                if (!event.detail || event.detail.visible) finish();
+              };
+              element.addEventListener("model-visibility", onVisible);
+              setTimeout(finish, 4000);
+            });
+
+        var updated = element.updateComplete
+          ? element.updateComplete.catch(function () {})
+          : Promise.resolve();
+
+        // Confirm the viewer actually marked itself loaded.
+        var confirmed = new Promise(function (res) {
+          if (element.loaded) {
+            res();
+            return;
+          }
+          var checks = 0;
+          var timer = setInterval(function () {
+            checks += 1;
+            if (element.loaded || checks > 40) {
+              clearInterval(timer);
+              res();
+            }
+          }, 100);
+        });
+
+        Promise.all([visible, updated, confirmed])
+          .then(function () {
+            return waitForPaint();
+          })
+          .then(done);
+      }
+
+      if (element.loaded) {
+        afterLoad();
         return;
       }
 
-      img.addEventListener("load", function () {
-        if (img.decode) {
-          img.decode().then(finish).catch(finish);
-        } else {
-          finish();
-        }
-      });
-      img.addEventListener("error", finish);
+      element.addEventListener("load", afterLoad, { once: true });
+      element.addEventListener("error", done, { once: true });
+      setTimeout(done, 25000);
     });
   }
 
-  function preloadFonts() {
-    if (!document.fonts || !document.fonts.ready) {
-      markLoaded("fonts");
-      return;
-    }
-
-    document.fonts.ready
-      .then(function () {
-        markLoaded("fonts");
-      })
-      .catch(function () {
-        markLoaded("fonts");
-      });
+  function waitForWindowLoad() {
+    return new Promise(function (resolve) {
+      if (document.readyState === "complete") {
+        loaded.window = true;
+        resolve();
+        return;
+      }
+      window.addEventListener(
+        "load",
+        function () {
+          loaded.window = true;
+          resolve();
+        },
+        { once: true },
+      );
+    });
   }
 
-  function trackFetch(url, key, onDone) {
-    fetch(url)
-      .then(function (response) {
-        if (!response.ok) throw new Error(key);
-        var total = Number(response.headers.get("Content-Length")) || 0;
-
-        if (!response.body || !response.body.getReader) {
-          return response.arrayBuffer().then(function (buffer) {
-            progress[key] = 1;
-            renderProgress();
-            onDone([buffer]);
-          });
-        }
-
-        var reader = response.body.getReader();
-        var received = 0;
-        var chunks = [];
-
-        function read() {
-          return reader.read().then(function (result) {
-            if (result.done) {
-              progress[key] = 1;
-              renderProgress();
-              onDone(chunks);
-              return;
-            }
-
-            chunks.push(result.value);
-            received += result.value.byteLength;
-            if (total) {
-              progress[key] = Math.min(1, received / total);
-              renderProgress();
-            }
-            return read();
-          });
-        }
-
-        return read();
-      })
-      .catch(function () {
-        markLoaded(key);
+  function waitForPaint() {
+    return new Promise(function (resolve) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          loaded.paint = true;
+          resolve();
+        });
       });
+    });
   }
 
-  function markLoaded(key) {
-    progress[key] = 1;
-    loaded[key] = true;
-    renderProgress();
+  function warmViewer() {
+    if (!viewer) return;
+    viewer.classList.add("is-warming");
+  }
+
+  function coolViewer() {
+    if (!viewer) return;
+    viewer.classList.remove("is-warming");
   }
 
   function renderProgress() {
-    var done =
-      loaded.viewer && loaded.shield && loaded.images && loaded.fonts;
+    if (exitScheduled) return;
 
-    if (done) {
+    var value = 0;
+    assetDefs.forEach(function (asset) {
+      value += (progress[asset.key] || 0) * asset.weight;
+    });
+
+    if (loaded.viewer) value = Math.max(value, 0.97);
+    if (loaded.paint && loaded.window && loaded.viewer && loaded.assets) {
       setPercent(100);
-      scheduleExit();
       return;
     }
-
-    var value =
-      progress.viewer * weights.viewer +
-      progress.shield * weights.shield +
-      progress.images * weights.images +
-      progress.fonts * weights.fonts;
 
     setPercent(Math.min(99, value * 100));
   }
@@ -253,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function playExit() {
     slideTimeline.pause();
+    coolViewer();
 
     gsap.to(".percentage-intro, .percentage", {
       duration: 0.3,
