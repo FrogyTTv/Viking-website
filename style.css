@@ -1,0 +1,37 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  /* font-family: var(--sans-fake); */
+  font-family: var(--sans);
+  /* font-size: 18px; */
+  /* color: var(--text); */
+  /* background: var(--bg); */
+}
+:root {
+  --bg: #222222;
+  --bg-accent: #1b1b1c;
+  --primary: #161af4;
+  --primary-pink: #f50076;
+  --primary-yellow: #ffaf03;
+  --primary-red: #fa2d3a;
+
+  --text: #fff;
+  --text-h: #999999;
+  --text-dark: #9f9f9f;
+  --border: #bdbdbd;
+  --border-thin: #424242;
+
+  /* --sans-fake: "Neue Montreal", "Geist", system-ui, sans-serif; */
+  --sans: "Geist", system-ui, sans-serif;
+  --mono: "Chivo Mono", ui-monospace, Consolas, monospace;
+
+  color: var(--text);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
