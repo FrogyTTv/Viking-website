@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Högger - Viking Website</title>
     <link rel="stylesheet" href="style.css" />
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   </head>
   <body>
     <nav>
@@ -34,7 +35,16 @@
           </section>
         </div>
         <section class="model-panner">
-          <p>This is the skibidi</p>
+          <model-viewer 
+            id="model-viewer" 
+            src="./src/Battle Axe.glb" 
+            camera-controls 
+            skybox-image="./src/lago_disola_4k.hdr" 
+            environment-image="./src/lago_disola_4k.hdr" 
+            max-field-of-view="45deg">
+          </model-viewer>
+          <button class="Shield">Examine Shield</button>
+          <button class="Weapon">Examine Axe</button>
         </section>
         <div class="wrapper">
           <section class="text-img">
@@ -52,5 +62,6 @@
         </div>
       </div>
     </main>
+    <script src="script.js" defer></script>
   </body>
 </html>
