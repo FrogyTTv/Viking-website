@@ -151,8 +151,8 @@ h1.title {
   width: 100%;
   max-width: 80rem;
   border-radius: 1.75rem;
-
   display: block;
+  background: #1a0004;
 }
 
 .model-panner .buttons {
@@ -263,6 +263,15 @@ footer .links {
   header {
     padding-inline: 1rem;
     height: 40rem;
+  }
+  .model-panner {
+    height: 38rem;
+    gap: 1.5rem;
+    padding-inline: 1rem;
+  }
+  #model-viewer {
+    max-height: 26rem;
+    border-radius: 1.25rem;
   }
   .logo {
     max-width: 22rem;

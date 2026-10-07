@@ -132,6 +132,3 @@ html.is-loading body {
   }
 }
 
-.loading-animation > img {
-  display: none;
-}

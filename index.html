@@ -6,12 +6,51 @@
     <title>Högger - Viking Website</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="loading.css" />
+    <link
+      rel="preload"
+      href="./src/lago_disola_512.hdr"
+      as="fetch"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="./src/Battle%20Axe.glb"
+      as="fetch"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="./src/icon-mockup.webp"
+      as="image"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      href="./src/Axe_img.webp"
+      as="image"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      href="./src/Dragon_img.webp"
+      as="image"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      href="./src/Shield.glb"
+      as="fetch"
+      crossorigin
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"
+    />
     <script
       type="module"
-      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+      src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"
     ></script>
     <script defer>
-      //   const viewer = document.getElementById("model-viewer");
       let toggleImages = false;
 
       const updateModel = () => {
@@ -28,10 +67,8 @@
       const changeImage = () => {
         toggleImages = !toggleImages;
         updateModel();
-        console.log(toggleImages);
       };
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
     <script
       src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"
       defer
@@ -67,7 +104,15 @@
       <h1 class="title">Wield the Axe. Bear the Dragon. Become Legend.</h1>
       <!-- <h1 class="title">Forge your legacy, Armed by the Högger</h1> -->
       <div class="logo-container">
-        <img src="./src/icon-mockup.png" alt="Logo For" class="logo" />
+        <img
+          src="./src/icon-mockup.webp"
+          alt="Logo For"
+          class="logo"
+          width="920"
+          height="960"
+          decoding="async"
+          fetchpriority="high"
+        />
       </div>
     </header>
     <main>
@@ -131,7 +176,13 @@
       </svg>
       <div class="wrapper">
         <section class="text-img">
-          <img src="./src/Axe_img.png" alt="" />
+          <img
+            src="./src/Axe_img.webp"
+            alt=""
+            width="1216"
+            height="753"
+            decoding="async"
+          />
           <div class="typografy">
             <h3 class="title">The Högger Battle Axe</h3>
             <p>
@@ -149,12 +200,16 @@
           id="model-viewer"
           src="./src/Battle Axe.glb"
           loading="eager"
+          reveal="auto"
           camera-controls
-          skybox-image="./src/lago_disola_1k.hdr"
-          environment-image="./src/lago_disola_1k.hdr"
+          skybox-image="./src/lago_disola_512.hdr"
+          environment-image="./src/lago_disola_512.hdr"
           field-of-view="70deg"
           min-field-of-view="70deg"
           max-field-of-view="70deg"
+          shadow-intensity="0.4"
+          exposure="1"
+          interaction-prompt="none"
           disable-zoom
           touch-action="pan-y"
         >
@@ -176,7 +231,13 @@
               in shield wall formations.
             </p>
           </div>
-          <img src="./src/Dragon_img.png" alt="" />
+          <img
+            src="./src/Dragon_img.webp"
+            alt=""
+            width="1216"
+            height="755"
+            decoding="async"
+          />
         </section>
       </div>
       <svg
@@ -265,14 +326,14 @@
               One Banner. One Clan. One Legacy.
             </p>
           </div>
-          <img src="./src/Dragon_img.png" alt="" />
+          <img src="./src/Dragon_img.webp" alt="" />
         </section>
       </div> -->
     </main>
     <footer>
       <h3>Högger</h3>
       <div class="links">
-        <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Concact</a>
+        <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Contact</a>
         <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Music Videos</a>
         <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Discord</a>
       </div>
