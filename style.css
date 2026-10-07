@@ -66,7 +66,17 @@ header {
 
   /* gap: 14rem; */
   height: 47rem;
-  /* margin-bottom: 5rem; */
+  /* margin-bottom: 10rem; */
+}
+.rune-seperator {
+  margin-block: 10rem;
+  /* background-color: red; */
+}
+.first {
+  margin-bottom: 0;
+}
+.second {
+  margin-top: 0;
 }
 
 .title {
@@ -113,6 +123,7 @@ h1.title {
   aspect-ratio: 16/9;
   max-width: 38rem;
   border-radius: 1.75rem;
+  object-fit: cover;
 }
 .typografy {
   display: grid;
@@ -152,4 +163,70 @@ h1.title {
   width: 4rem;
   font-size: 1.5em;
   border-radius: 20rem;
+}
+
+@media (max-width: 1100px) {
+  nav {
+    padding-inline: 2rem;
+  }
+  header {
+    /* background-color: blue; */
+    padding-inline: 2rem;
+  }
+  .logo {
+    /* max-width: 25rem; */
+    /* transform: none; */
+    padding: 2rem;
+  }
+  a,
+  p {
+    font-size: 1.6rem;
+  }
+  .title {
+    font-size: 2.8rem;
+  }
+  .text-img {
+    flex-direction: column;
+    padding-block: 2rem;
+    padding-inline: 2rem;
+    align-items: start;
+    /* margin: 0 auto; */
+  }
+  .typografy {
+    max-width: none;
+  }
+  .text-img img {
+    /* aspect-ratio: 16/9; */
+    width: 100%;
+    max-height: 19rem;
+
+    max-width: none;
+    border-radius: 1.75rem;
+  }
+}
+@media (max-width: 550px) {
+  nav {
+    padding-inline: 1rem;
+  }
+  header {
+    padding-inline: 1rem;
+  }
+  .logo {
+    max-width: 25rem;
+    transform: none;
+    padding: 2rem;
+  }
+  a,
+  p {
+    font-size: 1.4rem;
+  }
+  .title {
+    font-size: 2.6rem;
+  }
+  .wrapper {
+    padding-inline: 1rem;
+  }
+  .text-img {
+    padding-inline: 0rem;
+  }
 }
