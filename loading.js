@@ -467,5 +467,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.removeEventListener("touchmove", preventScroll);
     document.removeEventListener("keydown", preventScrollKeys);
     if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+    window.dispatchEvent(new CustomEvent("loader:done"));
   }
 });

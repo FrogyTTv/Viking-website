@@ -82,6 +82,16 @@ nav a {
   pointer-events: none;
 }
 
+.split {
+  opacity: 0;
+  will-change: transform;
+}
+
+.split,
+.split * {
+  will-change: transform;
+}
+
 footer .links .mag-zone {
   align-self: flex-end;
 }
