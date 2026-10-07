@@ -44,10 +44,10 @@ $(function () {
 
   percentEl.text(0);
   lockScroll();
+  preloadShield();
 
   customElements.whenDefined("model-viewer").then(function () {
     watchModel(document.getElementById("model-viewer"), "axe");
-    watchModel(document.getElementById("shield-preload"), "shield");
   });
 
   setTimeout(function () {
@@ -76,24 +76,56 @@ $(function () {
 
     element.addEventListener("load", function () {
       markLoaded(key);
-      releaseShield(element, key);
     });
     element.addEventListener("error", function () {
       markLoaded(key);
-      releaseShield(element, key);
     });
 
-    if (element.loaded) {
-      markLoaded(key);
-      releaseShield(element, key);
-    }
+    if (element.loaded) markLoaded(key);
   }
 
-  function releaseShield(element, key) {
-    if (key !== "shield") return;
-    requestAnimationFrame(function () {
-      element.remove();
-    });
+  function preloadShield() {
+    fetch("./src/Shield.glb")
+      .then(function (response) {
+        if (!response.ok) throw new Error("shield");
+        var total = Number(response.headers.get("Content-Length")) || 0;
+        if (!response.body || !response.body.getReader) {
+          return response.arrayBuffer().then(function (buffer) {
+            storeShield(buffer);
+          });
+        }
+        var reader = response.body.getReader();
+        var received = 0;
+        var chunks = [];
+        function read() {
+          return reader.read().then(function (result) {
+            if (result.done) {
+              storeShield(chunks);
+              return;
+            }
+            chunks.push(result.value);
+            received += result.value.byteLength;
+            if (total) {
+              progress.shield = Math.min(1, received / total);
+              renderProgress();
+            }
+            return read();
+          });
+        }
+        return read();
+      })
+      .catch(function () {
+        markLoaded("shield");
+      });
+  }
+
+  function storeShield(data) {
+    window.preloadedShieldUrl = URL.createObjectURL(
+      new Blob(data instanceof ArrayBuffer ? [data] : data, {
+        type: "model/gltf-binary",
+      }),
+    );
+    markLoaded("shield");
   }
 
   function markLoaded(key) {
@@ -109,7 +141,7 @@ $(function () {
       return;
     }
 
-    var value = progress.axe * 92 + progress.shield * 8;
+    var value = progress.axe * 85 + progress.shield * 15;
     setPercent(Math.min(99, value));
   }
 

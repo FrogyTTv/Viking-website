@@ -13,15 +13,6 @@ html.is-loading body {
   touch-action: none;
 }
 
-#shield-preload {
-  position: fixed;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
 .loading-animation .outer {
   display: table;
   width: 100%;

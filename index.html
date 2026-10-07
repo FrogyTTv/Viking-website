@@ -15,15 +15,14 @@
       let toggleImages = false;
 
       const updateModel = () => {
-        if (!toggleImages) {
-          document
-            .getElementById("model-viewer")
-            .setAttribute("src", "./src/Battle Axe.glb");
-        } else {
-          document
-            .getElementById("model-viewer")
-            .setAttribute("src", "./src/Shield.glb");
-        }
+        document
+          .getElementById("model-viewer")
+          .setAttribute(
+            "src",
+            toggleImages
+              ? window.preloadedShieldUrl || "./src/Shield.glb"
+              : "./src/Battle Axe.glb",
+          );
       };
 
       const changeImage = () => {
@@ -41,9 +40,6 @@
   </head>
   <body>
     <div class="loading-animation">
-      <img
-        src="https://images.unsplash.com/photo-1585468274952-66591eb14165?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Nzc0OTkzNDA&ixlib=rb-4.0.3&q=80"
-      />
       <div class="preloader-wrap">
         <div class="outer">
           <div class="inner">
@@ -51,8 +47,8 @@
               <ul class="preloader-intro">
                 <li class="preloader-list">Code by Elias</li>
                 <li class="preloader-list">Högger</li>
-                <li class="preloader-list">Code by Elias</li>
-                <li class="preloader-list">Högger</li>
+                <!-- <li class="preloader-list">Code by Elias</li> -->
+                <!-- <li class="preloader-list">Högger</li> -->
                 <!-- <li class="preloader-list">jQuery</li> -->
               </ul>
             </div>
@@ -154,22 +150,13 @@
           src="./src/Battle Axe.glb"
           loading="eager"
           camera-controls
-          skybox-image="./src/lago_disola_4k.hdr"
-          environment-image="./src/lago_disola_4k.hdr"
+          skybox-image="./src/lago_disola_1k.hdr"
+          environment-image="./src/lago_disola_1k.hdr"
           field-of-view="70deg"
           min-field-of-view="70deg"
           max-field-of-view="70deg"
           disable-zoom
           touch-action="pan-y"
-        >
-        </model-viewer>
-        <model-viewer
-          id="shield-preload"
-          src="./src/Shield.glb"
-          loading="eager"
-          alt=""
-          aria-hidden="true"
-          tabindex="-1"
         >
         </model-viewer>
 
