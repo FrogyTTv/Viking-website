@@ -1,12 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
 
-  var slides = document.querySelectorAll(".preloader-list");
   var intro = document.querySelector(".preloader-intro");
+  var slides = Array.prototype.slice.call(
+    document.querySelectorAll(".preloader-list"),
+  );
   var percentEl = document.getElementById("percent");
   var viewer = document.getElementById("model-viewer");
   var lineHeight = intro ? intro.getBoundingClientRect().height : 0;
   var slideDuration = 0.55;
+
+  // Clone the first word at the end so the loop can slide into it,
+  // then snap back to y:0 with no visible jump (both show the same text).
+  if (intro && slides.length > 1) {
+    var firstClone = slides[0].cloneNode(true);
+    firstClone.setAttribute("aria-hidden", "true");
+    intro.appendChild(firstClone);
+    slides = Array.prototype.slice.call(
+      document.querySelectorAll(".preloader-list"),
+    );
+  }
 
   var slideTimeline = gsap.timeline({
     paused: true,
@@ -14,23 +27,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   slides.forEach(function (slide, i) {
-    var label = "slide" + i;
-    slideTimeline.add(label);
-
-    if (i > 0) {
-      slideTimeline.to(
-        slides,
-        {
-          duration: slideDuration,
-          y: i * -1 * lineHeight,
-          ease: "power2.inOut",
-        },
-        label,
-      );
+    if (i === 0) {
+      slideTimeline.to({}, { duration: 0.45 });
+      return;
     }
 
+    slideTimeline.to(slides, {
+      duration: slideDuration,
+      y: i * -1 * lineHeight,
+      ease: "power2.inOut",
+    });
     slideTimeline.to({}, { duration: 0.45 });
   });
+
+  if (slides.length > 1) {
+    slideTimeline.set(slides, { y: 0 });
+  }
 
   slideTimeline.play();
 

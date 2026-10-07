@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (window.matchMedia("(pointer: coarse)").matches) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var strength = 0.3;
+  var strength = 0.15;
   var labelStrength = 0.24;
 
   document.querySelectorAll("a").forEach(function (anchor) {
