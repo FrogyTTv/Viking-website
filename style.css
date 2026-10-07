@@ -102,6 +102,7 @@ header {
   align-items: center;
   /* background-color: red; */
   padding-inline: calc(2 * 5.5rem + 2rem);
+  margin-top: 2rem;
 
   /* gap: 14rem; */
   height: 47rem;
