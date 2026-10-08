@@ -58,7 +58,7 @@ nav a {
   margin-block: 2rem;
 }
 body {
-  overflow: hidden;
+  overflow-y: hidden;
 }
 
 .mag-zone {
