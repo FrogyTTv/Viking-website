@@ -92,6 +92,16 @@ nav a {
   will-change: transform;
 }
 
+/* SplitText line masks use overflow:hidden — tight line-height clips glyphs */
+.typografy .title {
+  line-height: 1.25;
+}
+
+.typografy .line-mask {
+  padding-block: 0.2em;
+  margin-block: -0.2em;
+}
+
 footer .links .mag-zone {
   align-self: flex-end;
 }

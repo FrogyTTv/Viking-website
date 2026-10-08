@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         type: "words,lines",
         mask: "lines",
         linesClass: "line",
+        masksClass: "line-mask",
         autoSplit: true,
         onSplit: function (self) {
           return gsap.from(self.lines, {
