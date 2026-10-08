@@ -73,9 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     {
       key: "logo",
-      url: "./src/icon-mockup.png",
+      url: "./src/logo.svg",
       weight: 0.12,
-      type: "image/png",
+      type: "image/svg+xml",
     },
     {
       key: "axeImg",
