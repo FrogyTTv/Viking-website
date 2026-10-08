@@ -57,9 +57,6 @@ nav a {
   font-size: 2rem;
   margin-block: 2rem;
 }
-body {
-  overflow-y: hidden;
-}
 
 .mag-zone {
   display: inline-flex;
